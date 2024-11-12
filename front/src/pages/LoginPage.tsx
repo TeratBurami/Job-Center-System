@@ -10,8 +10,8 @@ export default function LoginPage() {
     }
 
     const Login=()=>{
-      // let url=`http://localhost:3333/api/login`
-      let url=`https://job-center-system-api.vercel.app/api/login`
+      let url=`http://localhost:3333/api/login`
+      // let url=`https://job-center-system-api.vercel.app/api/login`
       if(DataValidation()){
         fetch(url,{
           method:'POST',
@@ -24,7 +24,8 @@ export default function LoginPage() {
       .then(data=>{
           alert(data.msg)
           if(data.status=="success"){
-              localStorage.setItem('userRole', 'applicant');
+              localStorage.setItem('user_role', data.user_role);
+              localStorage.setItem('user_id', data.user_id);
               window.location.href = '/';
           }
       })

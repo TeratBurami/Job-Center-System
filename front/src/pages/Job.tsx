@@ -5,25 +5,26 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { useEffect, useState } from "react";
+import ApplyJob from "./ApplyJob";
+import { Button } from "@mui/material";
 
 export default function Job() {
-  function createData(
-    name: string,
-    calories: number,
-    fat: number,
-    carbs: number,
-    protein: number
-  ) {
-    return { name, calories, fat, carbs, protein };
-  }
+  const [data, setData] = useState([]);
+  const applicant_id = localStorage.getItem("user_id");
 
-  const rows = [
-    createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-    createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-    createData("Eclair", 262, 16.0, 24, 6.0),
-    createData("Cupcake", 305, 3.7, 67, 4.3),
-    createData("Gingerbread", 356, 16.0, 49, 3.9),
-  ];
+  let url = `http://localhost:3333/api/job`;
+  useEffect(() => {
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data.result);
+      });
+  }, []);
+
+  const handleClick=()=>{
+    window.location.href = '/detail';
+  }
 
   return (
     <div className="my-10 px-20">
@@ -32,26 +33,33 @@ export default function Job() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Dessert (100g serving)</TableCell>
-              <TableCell align="right">Calories</TableCell>
-              <TableCell align="right">Fat&nbsp;(g)</TableCell>
-              <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-              <TableCell align="right">Protein&nbsp;(g)</TableCell>
+              <TableCell>ID</TableCell>
+              <TableCell align="center">Title</TableCell>
+              <TableCell align="center">Company</TableCell>
+              <TableCell align="center">Salary</TableCell>
+              <TableCell align="center"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {data.map((item: any) => (
               <TableRow
-                key={row.name}
+                key={item.job_id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.name}
+                  {item.job_id}
                 </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
+                <TableCell align="center">{item.title}</TableCell>
+                <TableCell align="center">{item.company}</TableCell>
+                <TableCell align="center">{item.salary}</TableCell>
+                <TableCell sx={{ width: "15%" }} align="center"><Button onClick={handleClick} sx={{ width: "100%" }} variant="outlined">DETAIL</Button></TableCell>
+                <TableCell sx={{ width: "15%" }} align="center">
+                  <ApplyJob
+                    job_id={item.job_id}
+                    ap_id={applicant_id?.toString() || "id"}
+                    emp_id={item.emp_id}
+                  />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

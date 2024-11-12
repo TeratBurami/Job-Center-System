@@ -4,14 +4,14 @@ import {Link} from 'react-router-dom'
 export default function RegisterPage(){
     const [Role, setRole] = useState('')
     const [ap_data,setApData]=useState({citizen_id:'',gmail:'',tel:'',password:'',work_exp:'',ability:'',education:''})
-    const [emp_data,setEmpData]=useState({citizen_id:'',gmail:'',tel:'',password:'',req_skill:'',req_edu:'',req_age:''})
+    const [emp_data,setEmpData]=useState({citizen_id:'',company:'',gmail:'',tel:'',password:'',req_skill:'',req_edu:'',req_age:''})
     
     const ApDataValidation=()=>{
         return Role && ap_data.citizen_id && ap_data.gmail && ap_data.tel && ap_data.password && ap_data.work_exp && ap_data.ability && ap_data.education
     }
 
     const EmpDataValidation=()=>{
-        return Role && emp_data.citizen_id && emp_data.gmail && emp_data.tel && emp_data.password && emp_data.req_skill && emp_data.req_edu && emp_data.req_age
+        return Role && emp_data.citizen_id && emp_data.company && emp_data.gmail && emp_data.tel && emp_data.password && emp_data.req_skill && emp_data.req_edu && emp_data.req_age
     }
 
     const Submit=()=>{
@@ -36,8 +36,8 @@ export default function RegisterPage(){
     }
     
     const Register=(Role: string, data: any)=>{
-        // let url=`http://localhost:3333/api/${Role}/register`
-        let url=`https://job-center-system-api.vercel.app/api/${Role}/register`
+        let url=`http://localhost:3333/api/${Role}/register`
+        // let url=`https://job-center-system-api.vercel.app/api/${Role}/register`
         fetch(url,{
             method:'POST',
             headers:{
@@ -65,7 +65,7 @@ export default function RegisterPage(){
             <h1 className="text-2xl font-bold text-center">Sign Up</h1>
             <div className="flex mb-10 flex-col gap-8 p-6 bg-slate-200 shadow-md rounded-xl shadow-slate-800 w-3/4 md:w-1/3 mx-auto mt-4">
                 <div className="flex gap-10">
-                    <div className='flex gap-3'><p>Applicant</p><input type="radio" name="role" value="applicant" onChangeCapture={(e: React.ChangeEvent<HTMLInputElement>)=>{setRole(e.target.value), setEmpData({citizen_id:'',gmail:'',tel:'',password:'',req_skill:'',req_edu:'',req_age:''})}} /></div>
+                    <div className='flex gap-3'><p>Applicant</p><input type="radio" name="role" value="applicant" onChangeCapture={(e: React.ChangeEvent<HTMLInputElement>)=>{setRole(e.target.value), setEmpData({citizen_id:'',company:'',gmail:'',tel:'',password:'',req_skill:'',req_edu:'',req_age:''})}} /></div>
                     <div className='flex gap-3'><p>Employer</p><input type="radio" name="role" value="employer" onChangeCapture={(e: React.ChangeEvent<HTMLInputElement>)=>{setRole(e.target.value), setApData({citizen_id:'',gmail:'',tel:'',password:'',work_exp:'',ability:'',education:''})}} /></div>                
                 </div>
                 <div hidden={Role !== 'applicant'}>
@@ -81,6 +81,7 @@ export default function RegisterPage(){
                 </div>
                 <div hidden={Role == 'applicant'}>
                     <div><p>Citizen ID:</p><input onChangeCapture={(e: React.ChangeEvent<HTMLInputElement>)=>setEmpData({...emp_data,citizen_id:e.target.value})} className="w-full rounded border border-slate-900" type="text" /></div>
+                    <div><p>Company name:</p><input onChangeCapture={(e: React.ChangeEvent<HTMLInputElement>)=>setEmpData({...emp_data,company:e.target.value})} className="w-full rounded border border-slate-900" type="text" /></div>
                     <div className='flex gap-4'>
                         <div><p>Gmail:</p><input onChangeCapture={(e: React.ChangeEvent<HTMLInputElement>)=>setEmpData({...emp_data,gmail:e.target.value})} className="w-full rounded border border-slate-900" type="text" /></div>
                         <div><p>Tel:</p><input onChangeCapture={(e: React.ChangeEvent<HTMLInputElement>)=>setEmpData({...emp_data,tel:e.target.value})} className="w-full rounded border border-slate-900" type="text" /></div>
