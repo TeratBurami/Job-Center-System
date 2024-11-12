@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 
 export default function Detail() {
     const [data,setData]=useState([{
-      job_id:'',
+        job_id:'',
         title:'',
         detail:'',
         salary:'',
@@ -31,13 +31,11 @@ export default function Detail() {
 
     const { jobId } = useParams();
     useEffect(() => {
-        if(role=='employer'){
-          fetch(`http://localhost:3333/api/detail/${jobId}`)
-            .then((res) => res.json())
-            .then((data) => {
-                setData(data.result);
-            });
-        }
+      fetch(`http://localhost:3333/api/detail/${jobId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setData(data.result)
+        });
     }, []);
 
   return (
@@ -66,7 +64,7 @@ export default function Detail() {
             <h1 className="text-md font-bold">
               Skill: <p className="font-normal">{data[0].skill}</p>
             </h1>
-            <h1 className="text-xl font-base mt-6">
+            <h1 className="text-2xl font-bold mt-10">
               Contact:
             </h1>
             <h1 className="text-md font-bold">

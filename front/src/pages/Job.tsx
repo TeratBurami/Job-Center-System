@@ -8,10 +8,12 @@ import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
 import ApplyJob from "./ApplyJob";
 import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function Job() {
   const [data, setData] = useState([]);
   const applicant_id = localStorage.getItem("user_id");
+  const navigate = useNavigate();
 
   let url = `http://localhost:3333/api/job`;
   useEffect(() => {
@@ -22,9 +24,10 @@ export default function Job() {
       });
   }, []);
 
-  const handleClick=()=>{
-    window.location.href = '/detail';
-  }
+  const handleClick = (jobId: string) => {
+    navigate(`/detail/${jobId}`);
+  };
+
 
   return (
     <div className="my-10 px-20">
@@ -52,7 +55,7 @@ export default function Job() {
                 <TableCell align="center">{item.title}</TableCell>
                 <TableCell align="center">{item.company}</TableCell>
                 <TableCell align="center">{item.salary}</TableCell>
-                <TableCell sx={{ width: "15%" }} align="center"><Button onClick={handleClick} sx={{ width: "100%" }} variant="outlined">DETAIL</Button></TableCell>
+                <TableCell sx={{ width: "15%" }} align="center"><Button onClick={() => handleClick(item.job_id)} sx={{ width: "100%" }} variant="outlined">DETAIL</Button></TableCell>
                 <TableCell sx={{ width: "15%" }} align="center">
                   <ApplyJob
                     job_id={item.job_id}

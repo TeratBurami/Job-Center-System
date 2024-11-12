@@ -93,7 +93,18 @@ app.get("/api/detail/:id", (req, res) => {
       res.status(500).json({ error: err.message });
       return;
     }
-    res.json({ result: results });
+    if(results.length==0){
+      db.query("SELECT job_id,title,company,salary,req_edu,req_age,detail,skill,gmail AS emp_gmail,tel AS emp_tel FROM Job JOIN Employer ON Job.emp_id = Employer.emp_id WHERE job_id=?",[req.params.id], (err, results) => {
+        if (err) {
+          res.status(500).json({ error: err.message });
+          return;
+        }
+        res.json({ result: results,status:"error" });
+      });
+    }
+    else{
+      res.json({ result: results,status:"success" });
+    }
   });
 });
 
@@ -104,13 +115,8 @@ app.post('/api/job/apply', upload.single('image'), (req, res) => {
   if (!job_id || !ap_id || !emp_id || !resume) {
     return res.json({ msg: 'Missing required fields' });
   }
-
-  // Save the image and data in MySQL
-  const query = 'INSERT INTO ApplyJob (job_id, ap_id, emp_id, resume) VALUES (?, ?, ?, ?)';
-
-  // We store the resume as a BLOB (binary large object) in MySQL
   db.query(
-    query,
+    'INSERT INTO ApplyJob (job_id, ap_id, emp_id, resume) VALUES (?, ?, ?, ?)',
     [job_id, ap_id, emp_id, resume.buffer],
     (err, result) => {
       if (err) {
