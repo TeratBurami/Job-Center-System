@@ -8,6 +8,7 @@ import Job from './pages/Job'
 import Job_Emp from './pages/Job_Emp';
 import Posting from './pages/JobPosting';
 import Detail from './pages/Detail';
+import Notification from './pages/Notification';
 
 
 export default function App(){
@@ -30,6 +31,7 @@ export default function App(){
           <Route path="/job_emp" element={<LoginPage />} />
           <Route path="/posting" element={<LoginPage />} />
           <Route path="/detail/:jobId" element={<LoginPage />} />
+          <Route path="/notification" element={<LoginPage />} />
 
         </Routes>
       </BrowserRouter>
@@ -46,6 +48,7 @@ export default function App(){
           <Route path="/job_emp" element={<Job_Emp />} />
           <Route path="/posting" element={<Posting />} />
           <Route path="/detail/:jobId" element={<Detail />} />
+          <Route path="/notification" element={<Notification />} />
       </Routes>
     </BrowserRouter>
   );

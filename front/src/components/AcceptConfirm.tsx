@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 
-export default function ApplyJob() {
+interface Props {
+  job_id: string;
+  ap_id: string;
+}
+
+export default function ApplyJob({ job_id, ap_id }: Props) {
   const [open, setOpen] = useState(false);
 
 
@@ -12,6 +17,24 @@ export default function ApplyJob() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const Submit=()=>{
+    // let url=`http://localhost:3333/api/apply/accept`
+    let url=`https://job-center-system-api.vercel.app/api/apply/accept`
+    fetch(url,{
+        method:'PUT',
+        headers:{
+            'Content-Type':'application/json',
+        },
+        body: JSON.stringify({job_id:job_id,ap_id:ap_id,emp_id:localStorage.getItem('user_id')}),
+    })
+    .then(res=>res.json())
+    .then(data=>{
+        alert(data.msg)
+        window.location.reload()
+        handleClose()
+    })
+  }
 
   return (
     <React.Fragment>
@@ -28,7 +51,7 @@ export default function ApplyJob() {
           <Button onClick={handleClose} autoFocus>
             Cancel
           </Button>
-          <Button onClick={handleClose} variant="contained" color="success" >
+          <Button onClick={Submit} variant="contained" color="success" >
             Confirm
           </Button>
         </DialogActions>

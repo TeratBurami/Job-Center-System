@@ -36,8 +36,8 @@ export default function RegisterPage(){
     }
     
     const Register=(Role: string, data: any)=>{
-        let url=`http://localhost:3333/api/${Role}/register`
-        // let url=`https://job-center-system-api.vercel.app/api/${Role}/register`
+        // let url=`http://localhost:3333/api/${Role}/register`
+        let url=`https://job-center-system-api.vercel.app/api/${Role}/register`
         fetch(url,{
             method:'POST',
             headers:{
@@ -86,7 +86,7 @@ export default function RegisterPage(){
                         <div><p>Gmail:</p><input onChangeCapture={(e: React.ChangeEvent<HTMLInputElement>)=>setEmpData({...emp_data,gmail:e.target.value})} className="w-full rounded border border-slate-900" type="text" /></div>
                         <div><p>Tel:</p><input onChangeCapture={(e: React.ChangeEvent<HTMLInputElement>)=>setEmpData({...emp_data,tel:e.target.value})} className="w-full rounded border border-slate-900" type="text" /></div>
                     </div>
-                    <div><p>Password:</p><input onChangeCapture={(e: React.ChangeEvent<HTMLInputElement>)=>setEmpData({...emp_data,password:e.target.value})} className="w-full rounded border border-slate-900" type="text" /></div>
+                    <div><p>Password:</p><input onChangeCapture={(e: React.ChangeEvent<HTMLInputElement>)=>setEmpData({...emp_data,password:e.target.value})} className="w-full rounded border border-slate-900" type="password" /></div>
                     <div><p>Required Skills:</p><input onChangeCapture={(e: React.ChangeEvent<HTMLInputElement>)=>setEmpData({...emp_data,req_skill:e.target.value})} className="w-full rounded border border-slate-900" type="text" /></div>
                     <div><p>Required Education:</p><input onChangeCapture={(e: React.ChangeEvent<HTMLInputElement>)=>setEmpData({...emp_data,req_edu:e.target.value})} className="w-full rounded border border-slate-900" type="text" /></div>
                     <div><p>Age Range:</p><input onChangeCapture={(e: React.ChangeEvent<HTMLInputElement>)=>setEmpData({...emp_data,req_age:e.target.value})} className="w-full rounded border border-slate-900" type='text' /></div>

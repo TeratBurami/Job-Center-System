@@ -57,8 +57,19 @@ app.get("/api/employer", (req, res) => {
 });
 
 app.get("/api/apply", (req, res) => {
-  const sql = "SELECT * FROM ApplyJob";
+  const sql = "SELECT job_id,ap_id,emp_id,isAccept FROM ApplyJob";
   db.query(sql, (err, results) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json({ result: results });
+  });
+});
+
+app.get("/api/apply/:id", (req, res) => {
+  const sql = "SELECT ap_id, isAccept FROM ApplyJob WHERE job_id=?";
+  db.query(sql,[req.params.id], (err, results) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
@@ -108,13 +119,13 @@ app.get("/api/job/:id", (req, res) => {
 });
 
 app.get("/api/detail/:id", (req, res) => {
-  db.query("SELECT Job.job_id,title,detail,salary,skill,Applicant.gmail AS ap_gmail,Applicant.tel AS ap_tel,Employer.gmail AS emp_gmail, Employer.tel AS emp_tel,work_exp,ability,education,company,req_edu,req_age  FROM ApplyJob JOIN Job ON ApplyJob.job_id = Job.job_id JOIN Applicant ON ApplyJob.ap_id = Applicant.ap_id JOIN Employer ON ApplyJob.emp_id = Employer.emp_id WHERE Job.job_id=?",[req.params.id], (err, results) => {
+  db.query("SELECT Job.job_id,title,detail,salary,skill,Applicant.gmail AS ap_gmail,Applicant.tel AS ap_tel,Applicant.ap_id AS ap_id,Employer.gmail AS emp_gmail, Employer.tel AS emp_tel, Employer.emp_id, work_exp,ability,education,company,req_edu,req_age  FROM ApplyJob JOIN Job ON ApplyJob.job_id = Job.job_id JOIN Applicant ON ApplyJob.ap_id = Applicant.ap_id JOIN Employer ON ApplyJob.emp_id = Employer.emp_id WHERE Job.job_id=?",[req.params.id], (err, results) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
     }
     if(results.length==0){
-      db.query("SELECT job_id,title,company,salary,req_edu,req_age,detail,skill,gmail AS emp_gmail,tel AS emp_tel FROM Job JOIN Employer ON Job.emp_id = Employer.emp_id WHERE job_id=?",[req.params.id], (err, results) => {
+      db.query("SELECT job_id,title,company,salary,req_edu,req_age,detail,skill,gmail AS emp_gmail,tel AS emp_tel,Employer.emp_id FROM Job JOIN Employer ON Job.emp_id = Employer.emp_id WHERE job_id=?",[req.params.id], (err, results) => {
         if (err) {
           res.status(500).json({ error: err.message });
           return;
@@ -128,6 +139,23 @@ app.get("/api/detail/:id", (req, res) => {
   });
 });
 
+app.get("/api/notification/:role/:id", (req, res) => {
+  const role=req.params.role;
+  let sql=''
+  if(role=="applicant"){
+    sql="SELECT title,company,gmail,tel,detail,salary,Job.job_id FROM ApplyJob JOIN Employer ON ApplyJob.emp_id=Employer.emp_id JOIN Job ON Job.job_id=ApplyJob.job_id WHERE ap_id=? AND isAccept=1";
+  }
+  else{
+    sql="SELECT title,gmail,tel,ability,education,salary,Applicant.ap_id,Job.job_id FROM ApplyJob JOIN Applicant ON ApplyJob.ap_id=Applicant.ap_id JOIN Job ON Job.job_id=ApplyJob.job_id WHERE ApplyJob.emp_id=? AND isAccept=0";
+  }
+  db.query(sql,[req.params.id], (err, results) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json({ result: results });
+  });
+});
 
 app.post('/api/job/apply', upload.single('image'), (req, res) => {
   const { job_id, ap_id, emp_id } = req.body;
@@ -305,35 +333,30 @@ app.post("/api/job/posting",(req,res)=>{
   })
 })
 
-// app.post("/api/login",(req,res)=>{
-//     db.query("SELECT * FROM Applicant UNION SELECT * FROM Employer",(err,results)=>{
-//         if (err) {
-//             res.json({ msg: err.message, status: "error" });
-//             return;
-//         }
-
-//         let emailValidated=results.find(result => result.gmail === `${req.body.gmail}`)
-//         if(emailValidated){
-//             if(emailValidated.password==req.body.password){
-
-//             }
-//             else{
-//                 res.json({msg:"Incorrect gmail or password, please check and try again",status:"error"})
-//             }
-//         }
-//         else{
-//             res.json({msg:"Couldn't find your gmail or your account has been deleted, please register first",status:"error"})
-//         }
-//     })
-// })
+app.put("/api/apply/accept", (req, res) => {
+  db.query(
+    "UPDATE ApplyJob SET isAccept = 1 WHERE job_id = ? AND ap_id = ? AND emp_id = ?",
+    [req.body.job_id, req.body.ap_id,req.body.emp_id],
+    (err, results) => {
+      if (err) {
+        res.json({ status: "error", msg: err.message });
+        return;
+      }
+      res.json({
+        msg: "Accept success",
+        status: "success",
+      });
+    }
+  );
+});
 
 app.get("/", (req, res) => {
   res.json("Hello World");
 });
 
-app.listen(process.env.PORT, function (err) {
-  if (err) console.log("Error in server setup");
-  console.log("Server listening on Port", process.env.PORT);
-});
+// app.listen(process.env.PORT, function (err) {
+//   if (err) console.log("Error in server setup");
+//   console.log("Server listening on Port", process.env.PORT);
+// });
 
 module.exports = app;

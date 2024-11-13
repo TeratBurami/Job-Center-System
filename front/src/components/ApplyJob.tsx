@@ -25,14 +25,16 @@ export default function ApplyJob({ job_id, ap_id, emp_id }: Props) {
   };
 
   const Submit = () => {
-    const url = `http://localhost:3333/api/job/apply`;
+    // const url = `http://localhost:3333/api/job/apply`;
+    const url = `https://job-center-system-api.vercel.app/api/job/apply`;
 
+    console.log(data.job_id, data.ap_id, data.emp_id);
     if (data.resume) {
       const formData = new FormData();
       formData.append('job_id', data.job_id);
       formData.append('ap_id', data.ap_id);
       formData.append('emp_id', data.emp_id);
-      formData.append('image', data.resume); // 'image' corresponds to the backend field
+      formData.append('image', data.resume);
 
       fetch(url, {
         method: "POST",
@@ -41,6 +43,7 @@ export default function ApplyJob({ job_id, ap_id, emp_id }: Props) {
         .then((res) => res.json())
         .then((data) => {
           alert(data.msg);
+          window.location.href = "/job";
           handleClose();
         })
         .catch((error) => {
