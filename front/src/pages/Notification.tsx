@@ -12,7 +12,7 @@ export default function Notification() {
   const url=`https://job-center-system-api.vercel.app/api/notification/${role}/${account_id}`
 
   useEffect(() => {
-    fetch(`http://localhost:3333/api/notification/${role}/${account_id}`)
+    fetch(url)
       .then((res) => res.json())
       .then((data) => {
         setData(data.result);
