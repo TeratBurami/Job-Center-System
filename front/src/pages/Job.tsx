@@ -6,22 +6,30 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
-import ApplyJob from "./ApplyJob";
+import ApplyJob from "../components/ApplyJob";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 export default function Job() {
   const [data, setData] = useState([]);
   const applicant_id = localStorage.getItem("user_id");
+  const role=localStorage.getItem("user_role");
   const navigate = useNavigate();
 
   let url = `http://localhost:3333/api/job`;
   useEffect(() => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data.result);
-      });
+    if(role=="employer"){
+      alert('You are not allowed to access this page');
+      window.location.href = "/";
+    }
+    else{
+      fetch(url)
+        .then((res) => res.json())
+        .then((data) => {
+          setData(data.result);
+        });
+    }
+
   }, []);
 
   const handleClick = (jobId: string) => {

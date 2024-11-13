@@ -55,7 +55,7 @@ export default function ApplyJob({ job_id, ap_id, emp_id }: Props) {
   return (
     <React.Fragment>
       <Button sx={{ width: "100%" }} variant="contained" onClick={handleClickOpen}>
-        Apply
+        APPLY
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
         <DialogTitle id="alert-dialog-title">

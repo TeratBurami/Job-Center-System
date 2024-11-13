@@ -7,6 +7,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import AcceptConfirm from "../components/AcceptConfirm";
 
 
 export default function Detail() {
@@ -31,12 +32,24 @@ export default function Detail() {
 
     const { jobId } = useParams();
     useEffect(() => {
-      fetch(`http://localhost:3333/api/detail/${jobId}`)
+      fetch(`http://localhost:3333/api/job/${jobId}`)
+      .then((res) => res.json())
+      .then((data)=>{
+        if(data.result[0].emp_id==localStorage.getItem('user_id')){
+          fetch(`http://localhost:3333/api/detail/${jobId}`)
         .then((res) => res.json())
         .then((data) => {
           setData(data.result)
         });
+        }else{
+          alert('You are not the employer of this job')
+          window.location.href='/'
+        }
+      })
+
+
     }, []);
+
 
   return (
     <div className="mt-10 px-20">
@@ -74,35 +87,40 @@ export default function Detail() {
               Tel: <span className="font-normal">{data[0].emp_tel}</span>
             </h1>
         </div>
-        <TableContainer hidden={role=='applicant'} component={Paper} sx={{marginTop: '2rem'}}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Gmail</TableCell>
-                <TableCell align="center">Tel</TableCell>
-                <TableCell align="center">Work Experience</TableCell>
-                <TableCell align="center">Skill</TableCell>
-                <TableCell align="center">Education</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data.map((item: any) => (
-                <TableRow
-                  key={item.job_id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {item.job_id}
-                  </TableCell>
-                  <TableCell align="center">{item.ap_gmail}</TableCell>
-                  <TableCell align="center">{item.work_exp}</TableCell>
-                  <TableCell align="center">{item.ability}</TableCell>
-                  <TableCell align="center">{item.education}</TableCell>
+        <div hidden={role=='applicant'}>
+        <h1 className="text-2xl font-bold mt-20">Applied {data[0].ap_gmail == null? "0" : data.length} applicants</h1>
+          <TableContainer  component={Paper} sx={{marginTop: '0.5rem'}}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Gmail</TableCell>
+                  <TableCell align="center">Tel</TableCell>
+                  <TableCell align="center">Work Experience</TableCell>
+                  <TableCell align="center">Skill</TableCell>
+                  <TableCell align="center">Education</TableCell>
+                  <TableCell align="center"></TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {data.map((item: any) => (
+                  <TableRow
+                    key={item.job_id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {item.ap_gmail}
+                    </TableCell>
+                    <TableCell align="center">{item.ap_tel}</TableCell>
+                    <TableCell align="center">{item.work_exp}</TableCell>
+                    <TableCell align="center">{item.ability}</TableCell>
+                    <TableCell align="center">{item.education}</TableCell>
+                    <TableCell align="center">{item.ap_gmail && <AcceptConfirm></AcceptConfirm>}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
       </div>
     </div>
   );

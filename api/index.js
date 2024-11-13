@@ -67,8 +67,28 @@ app.get("/api/apply", (req, res) => {
   });
 });
 
+app.get("/api/apply/amount/:id", (req, res) => {
+  db.query("SELECT COUNT(*) AS apply_amount FROM ApplyJob WHERE job_id=?", [req.params.id], (err, result) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.send(result);
+  });
+});
+
 app.get("/api/job", (req, res) => {
   db.query("SELECT * FROM Job JOIN Employer ON Job.emp_id = Employer.emp_id", (err, results) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json({ result: results });
+  });
+});
+
+app.post("/api/job_emp", (req, res) => {
+  db.query("SELECT * FROM Job JOIN Employer ON Job.emp_id = Employer.emp_id WHERE Job.emp_id=?",[req.body.emp_id], (err, results) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
@@ -107,6 +127,7 @@ app.get("/api/detail/:id", (req, res) => {
     }
   });
 });
+
 
 app.post('/api/job/apply', upload.single('image'), (req, res) => {
   const { job_id, ap_id, emp_id } = req.body;
@@ -266,7 +287,7 @@ app.post("/api/login", (req, res) => {
         }
       }
 
-      return res.status(404).json({ message: "User not found" });
+      return res.json({ msg: "User not found",status:"error" });
     });
   });
 });

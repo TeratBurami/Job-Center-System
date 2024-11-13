@@ -9,7 +9,6 @@ export default function Menu(){
         if (role !== null) {
             setRole(role);
         }
-        console.log(role);
     }, []);
 
     return(

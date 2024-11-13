@@ -11,21 +11,34 @@ import { Button } from "@mui/material";
 
 export default function Job() {
   const [data, setData] = useState<any[]>([]);
-  const navigate = useNavigate(); // Initialize the navigate function
+  const navigate = useNavigate();
+  const role = localStorage.getItem("user_role");
 
-  let url = `http://localhost:3333/api/job`;
-  
+  let url = `http://localhost:3333/api/job_emp`;
+
   useEffect(() => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data.result);
-      });
+    if (role == "applicant") {
+      alert("You are not allowed to access this page");
+      window.location.href = "/";
+    } else {
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          emp_id: localStorage.getItem("user_id"),
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setData(data.result);
+        });
+    }
   }, []);
 
-  // Handle button click to navigate to detail page
   const handleClick = (jobId: string) => {
-    navigate(`/detail/${jobId}`); // Navigate to /detail with the job_id
+    navigate(`/detail/${jobId}`);
   };
 
   return (
@@ -38,12 +51,10 @@ export default function Job() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Post ID</TableCell>
+              <TableCell>ID</TableCell>
               <TableCell align="center">Title</TableCell>
               <TableCell align="center">Company</TableCell>
               <TableCell align="center">Salary</TableCell>
-              <TableCell align="center">Apply amount</TableCell>
-              <TableCell align="center">View amount</TableCell>
               <TableCell align="center"></TableCell>
             </TableRow>
           </TableHead>
@@ -59,11 +70,9 @@ export default function Job() {
                 <TableCell align="center">{item.title}</TableCell>
                 <TableCell align="center">{item.company}</TableCell>
                 <TableCell align="center">{item.salary}</TableCell>
-                <TableCell align="center">{item.job_id}</TableCell>
-                <TableCell align="center">{item.job_id}</TableCell>
                 <TableCell sx={{ width: "15%" }} align="center">
                   <Button
-                    onClick={() => handleClick(item.job_id)} // Pass job_id to handleClick
+                    onClick={() => handleClick(item.job_id)}
                     sx={{ width: "100%" }}
                     variant="outlined"
                   >
