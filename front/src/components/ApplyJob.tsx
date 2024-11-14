@@ -72,7 +72,7 @@ export default function ApplyJob({ job_id, ap_id, emp_id }: Props) {
             type="file"
             id="image"
             name="image"
-            accept="image/*"
+            accept="image/png, image/jpeg, application/pdf"
             required
             onChange={(e) => setData({ ...data, resume: e.target.files![0] })}
           />

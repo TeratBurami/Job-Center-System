@@ -42,11 +42,11 @@ export default function Menu(){
                     </div>
                     <div className="w-32 p-2 rounded bg-slate-100 shadow shadow-black flex flex-col place-items-center">
                         <RecordVoiceOverIcon color="primary" sx={{ fontSize: 50 , marginLeft: '15px'}} />
-                        <Link to='/interview' className="mt-2 p-1 rounded text-blue-600 underline underline-offset-4">Interview</Link>
+                        <p className="mt-2 p-1 rounded text-blue-600 underline underline-offset-4">Interview</p>
                     </div>
                     <div className="w-32 p-2 rounded bg-slate-100 shadow shadow-black flex flex-col place-items-center">
                         <SettingsIcon color="primary" sx={{ fontSize: 50 }} />
-                        <Link to="/setting" className="mt-2 p-1 rounded text-blue-600 underline underline-offset-4">Setting</Link>
+                        <p className="mt-2 p-1 rounded text-blue-600 underline underline-offset-4">Setting</p>
                     </div>
                 </div>
             </div>

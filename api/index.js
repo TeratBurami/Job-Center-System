@@ -119,7 +119,7 @@ app.get("/api/job/:id", (req, res) => {
 });
 
 app.get("/api/detail/:id", (req, res) => {
-  db.query("SELECT Job.job_id,title,detail,salary,skill,Applicant.gmail AS ap_gmail,Applicant.tel AS ap_tel,Applicant.ap_id AS ap_id,Employer.gmail AS emp_gmail, Employer.tel AS emp_tel, Employer.emp_id, work_exp,ability,education,company,req_edu,req_age  FROM ApplyJob JOIN Job ON ApplyJob.job_id = Job.job_id JOIN Applicant ON ApplyJob.ap_id = Applicant.ap_id JOIN Employer ON ApplyJob.emp_id = Employer.emp_id WHERE Job.job_id=?",[req.params.id], (err, results) => {
+  db.query("SELECT Job.job_id,title,detail,salary,skill,Applicant.gmail AS ap_gmail,Applicant.tel AS ap_tel,Applicant.ap_id AS ap_id,Employer.gmail AS emp_gmail, Employer.tel AS emp_tel, Employer.emp_id, work_exp,ability,education,company,req_edu,req_age FROM ApplyJob JOIN Job ON ApplyJob.job_id = Job.job_id JOIN Applicant ON ApplyJob.ap_id = Applicant.ap_id JOIN Employer ON ApplyJob.emp_id = Employer.emp_id WHERE Job.job_id=? AND isAccept=0",[req.params.id], (err, results) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;

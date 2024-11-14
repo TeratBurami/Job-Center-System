@@ -44,6 +44,7 @@ export default function Detail() {
   // const detail_url=`http://localhost:3333/api/detail/${jobId}`
   const detail_url=`https://job-center-system-api.vercel.app/api/detail/${jobId}`
 
+
   useEffect(() => {
     fetch(job_url)
       .then((res) => res.json())
@@ -58,7 +59,6 @@ export default function Detail() {
               setData(data.result);
               setJobID(data.result[0].job_id);
               setEmpID(data.result[0].emp_id);
-              console.log(data.result);
             });
         } else {
           alert("You are not the employer of this job");
@@ -66,7 +66,6 @@ export default function Detail() {
         }
       });
 
-    console.log(empID)
   }, [jobID, empID]);
 
   return (
