@@ -8,7 +8,7 @@ export default function RegisterPage(){
     const [ageRange,setAgeRange]=useState({min:'',max:''})
     
     const ApDataValidation=()=>{
-        if(ageRange.min && ageRange.max && Role && ap_data.citizen_id && ap_data.gmail && ap_data.tel && ap_data.password && ap_data.work_exp && ap_data.ability && ap_data.education){
+        if(Role && ap_data.citizen_id && ap_data.gmail && ap_data.tel && ap_data.password && ap_data.work_exp && ap_data.ability && ap_data.education){
             if(ap_data.citizen_id.length==13 && /^\d+$/.test(ap_data.citizen_id)){
                 if(ap_data.tel.length<=10 && /^\d+$/.test(ap_data.tel) && ap_data.tel.startsWith('0')){
                     if(ap_data.gmail.includes('@') && ap_data.gmail.includes('.')){
