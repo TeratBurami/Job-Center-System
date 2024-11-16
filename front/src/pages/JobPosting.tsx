@@ -10,16 +10,16 @@ export default function JobPosting(){
     const Validate=()=>{
         if(salaryRange.min && salaryRange.max && data.title && data.detail && data.skill){
             if(data.title.length<=50){
-                if(Number(salaryRange.min)<Number(salaryRange.max)){
-                    if((/^\d+$/.test(salaryRange.min)) && (/^\d+$/.test(salaryRange.max))){
+                if((/^\d+$/.test(salaryRange.min)) && (/^\d+$/.test(salaryRange.max))){
+                    if(Number(salaryRange.min)<Number(salaryRange.max)){
                         setData(prevData => ({ ...prevData, salary: `${salaryRange.min} - ${salaryRange.max}` }))
                     }
                     else{
-                        alert('Please enter number as salary range')
+                        alert('Min salary must be less than max salary')
                     }
                 }
                 else{
-                    alert('Min salary must be less than max salary')
+                    alert('Please enter only number for salary range')
                 }
             }
             else{
